@@ -16,7 +16,7 @@ $express e-commerce --hbs
 $code e-commerce
 
 
-##### -Instalamos las dependencias incluidas en el package.json
+##### -Instalamos las dependencias incluidas en el archivo 'package.json'
 
 $npm install
 
@@ -31,21 +31,49 @@ $npm install mongoose
 $npm audit fix
 
 
-##### -Instalamos nodemon, para hacer que al guarda cambios en nuestros archivos, el servidor que tenemos levantado se reinicie de manera automática
+##### -Instalamos nodemon, para hacer que al guardar cambios en nuestros archivos, el servidor que tenemos levantado se reinicie de manera automática
 
 $npm install nodemon
 
 # - INICIAMOS EL PROYECTO - #
 
-##### Creamos la carpeta 'config' en la raiz del proyecto, y dentro creamos el archivo mongoose.js
+##### -Creamos la carpeta 'config' en la raiz del proyecto, y dentro creamos el archivo 'mongoose.js'
 
 Aquí crearemos la conexión a la base de datos
 
-###### Añadimos en app.js la siguiente línea, para permitir la conexión a la base de datos
+###### -Añadimos en el archivo 'app.js' la siguiente línea (para permitir la conexión a la base de datos)
 
 require('./config/mongoose');
 
-##### Creamos la carpeta 'models' en la raiz del proyecto, y dentro creamos el archivo Producto.js
+##### -Accedemos a la carpeta 'bin', y en el archivo 'www' añadimos:
 
-Aquí crearemos la validación para nuestros documentos de nuestra base de datos
+server.listen(port,()=>console.log("Servidor levantado en el puerto", port));
+
+# - CONFIGURAMOS CRUD - #
+
+##### -Creamos la carpeta 'models' en la raiz del proyecto, y dentro creamos el archivo 'Producto.js'
+
+Aquí crearemos la validación para nuestros documentos de nuestra base de datos (los productos que venderemos en nuestra web)
+
+Nuestros productos tendrán foto. Estás fotos estarán almacenadas en '/public/images'. Para que estas fotos sean visibles vamos a añadir a 'app.js' lo siguiente:
+
+app.use(express.static(path.join(__dirname, 'public/images')));
+
+De esta manera, con un enlace tipo 'http://localhost:3000/foto.jpg' podremos acceder a las imagenes almacenadas
+
+##### -Creamos la carpeta 'controllers' en la raiz del proyecto, y dentro creamos el archivo 'ProductoControllers.js'
+
+Aquí crearemos las funcionalidades de nuestro CRUD
+
+##### -Dentro de la carpeta 'routes' creamos el archivo 'productos.js'
+
+Aquí añadiremos las diferentes rutas de nuestro CRUD
+
+##### -En el archivo 'app.js' añadimos las rutas creadas en el archivo anterior
+
+var productosRouter = require('./routes/productos');
+
+----------------------------------------------------
+
+app.use('/producto', productosRouter);
 
