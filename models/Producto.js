@@ -1,5 +1,6 @@
 const mongoose = require ('mongoose');
 
+//CREAMOS LAS REGLAS PARA LA CREACIÓN DE PRODUCTOS
 const ProductoSchema = new mongoose.Schema({
     nombre: String,
     foto: String,
