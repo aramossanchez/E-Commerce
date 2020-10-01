@@ -14,4 +14,16 @@ router.post('/', ProductoController.crearProducto);
 //VEMOS TODOS LOS PRODUCTOS CREADOS
 router.get('/buscar', ProductoController.verTodos);
 
+//BUSCAMOS PRODUCTOS A TRAVÉS DE SU CATEGORÍA
+router.get('/buscar/categoria/:categoria', ProductoController.buscarCategoria);
+
+//BUSCAMOS PRODUCTOS A TRAVÉS DE SU VENDEDOR
+router.get('/buscar/vendedor/:vendedor', ProductoController.buscarVendedor);
+
+//BUSCAMOS POR ID Y ELIMINAMOS PRODUCTO
+router.get('/eliminar/:id', ProductoController.eliminarProducto);
+
+//BUSCAMOS POR ID Y ACTUALIZAMOS PRODUCTO POR BODY
+router.post('/modificar/:id', ProductoController.modificarProducto);
+
 module.exports = router;

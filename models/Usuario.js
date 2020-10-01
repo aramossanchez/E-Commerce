@@ -37,6 +37,7 @@ UsuarioSchema.pre('save', async function(next){
     }
 });
 
+
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
 
 module.exports = Usuario;

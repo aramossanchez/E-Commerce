@@ -105,4 +105,46 @@ var usuariosRouter = require('./routes/usuarios');
 
 app.use('/usuarios', usuariosRouter);
 
+## -Para crear un método de autenticación por tokens vamos a instalar jsonwebtoken
+
+$npm install --save jsonwebtoken
+
+## -Creamos en la carpeta 'config' el archivo 'token.js', y creamos la clave maestra con la que encriptaremos la informacion
+
+module.exports = {
+    vendedor: "Aju5ne@ikTO61=eUi"
+}
+
+## -Creamos en la carpeta 'config' el archivo 'accesoTokenUsuarios'
+
+En este archivo generaremos el código necesario para crear una validación por token para los usuarios
+
+## -Creamos en la carpeta 'config' el archivo 'accesoTokenVendedores'
+
+En este archivo generaremos el código necesario para crear una validación por token para los vendedores
+
+
+
+## -Añadimos en app.js el siguiente contenido
+
+const bodyParser = require('body-parser'),
+      jwt = require('jsonwebtoken'),
+      config = require('./config/config');
+
+----------------------------------------------------
+
+app.set('llave', config.llave);
+
+----------------------------------------------------
+
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json());
+
+----------------------------------------------------
+
+
+
+
+
+
 

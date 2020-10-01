@@ -4,11 +4,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const bodyParser = require('body-parser');
+
+const accesoTokenVendedores = require('./config/accesoTokenVendedores');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productosRouter = require('./routes/productos');
 var usuariosRouter = require('./routes/usuarios');
+
 
 var app = express();
 
@@ -21,6 +25,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/images')));
+//SETEAMOS PARA QUE BODYPARSER NOS CONVIERTA LO QUE VIENE DEL CLIENTE
+app.use(bodyParser.urlencoded({ extended: true}));
+//LO PASAMOS A JSON
+app.use(bodyParser.json());
 
 
 app.use('/', indexRouter);
@@ -28,10 +36,26 @@ app.use('/users', usersRouter);
 app.use('/productos', productosRouter);
 app.use('/usuarios', usuariosRouter);
 
+
+
+
+ app.get('/datos', accesoTokenVendedores, (req, res) => {
+  const datos = [
+   { id: 1, nombre: "Asfo" },
+   { id: 2, nombre: "Denisse" },
+   { id: 3, nombre: "Carlos" }
+  ];
+  res.json(datos);
+ });
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
