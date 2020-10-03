@@ -10,7 +10,6 @@ const accesoTokenVendedores = express.Router();
 
 accesoTokenVendedores.use((req, res, next) => {
     const token = req.headers['token-acceso'];
-    console.log(token);
     if (token) {
       jwt.verify(token, app.get('vendedor'), (err, decoded) => {      
         if (err) {

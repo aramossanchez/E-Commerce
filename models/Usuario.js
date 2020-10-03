@@ -7,13 +7,32 @@ const UsuarioSchema = new mongoose.Schema({
     apellidos: String,
     dni: {
         type: String,
+        required: true,
+        unique: true
+    },
+    direccion: {
+        type: String,
         required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    telefono: {
+        type: Number,
+        minlength: 9
     },
     rol: {
         type: String,
-        enum: ["usuario", "vendedor", "administrador"]
+        enum: ["usuario", "vendedor", "administrador"],
+        default: "usuario"
     },
-    contraseña: String
+    contraseña: {
+        type: String,
+        minlength: 8,
+        maxlength: 16
+    }
 },
 
 //HACEMOS QUE EN LAS BÚSQUEDAS NO SE MUESTREN LAS CONTRASEÑAS

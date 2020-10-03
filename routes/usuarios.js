@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const UsuarioController = require ('../controllers/UsuarioController');
-const Usuario = require('../models/Usuario');
 
 
 //PÁGINA DE INICIO DE USUARIOS

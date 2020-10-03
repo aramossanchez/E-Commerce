@@ -1,4 +1,5 @@
 const Producto = require ('../models/Producto');
+
 const ProductoController = {
     async crearProducto(req,res){
         try {
@@ -52,13 +53,74 @@ const ProductoController = {
 
     async modificarProducto(req,res){
         try {
-            const producto = await Producto.findByIdAndUpdate(req.params.id, req.body);
+            const producto = await Producto.findByIdAndUpdate(req.params.id, req.body, {new: true});
             res.send (producto);
         } catch (error) {
             console.error(error);
             res.status(500).send({message: 'Hubo un error al modificar el producto', error});
         }
     },
+
+    async precioAscendente(req,res){
+        try {
+            const productos = await Producto.find().sort({precio:1});
+            res.send (productos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'Hubo un error al buscar los productos', error});
+        }
+    },
+
+    async precioDescendente(req,res){
+        try {
+            const productos = await Producto.find().sort({precio:-1});
+            res.send (productos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'Hubo un error al buscar los productos', error});
+        }
+    },
+
+    async nombreAscendente(req,res){
+        try {
+            const productos = await Producto.find().sort({nombre:1});
+            res.send (productos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'Hubo un error al buscar los productos', error});
+        }
+    },
+
+    async nombreDescendente(req,res){
+        try {
+            const compras = await Producto.find().sort({nombre:-1});
+            res.send (productos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'Hubo un error al buscar los productos', error});
+        }
+    },
+
+    async masVendidos(req,res){
+        try {
+            const productos = await Producto.find().sort({vendidos:-1});
+            res.send (productos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'Hubo un error al buscar los productos', error});
+        }
+    },
+
+    async menosVendidos(req,res){
+        try {
+            const productos = await Producto.find().sort({vendidos:1});
+            res.send (productos);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({message: 'Hubo un error al buscar los productos', error});
+        }
+    }
+
 };
 
 module.exports = ProductoController;

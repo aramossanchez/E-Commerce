@@ -109,10 +109,11 @@ app.use('/usuarios', usuariosRouter);
 
 $npm install --save jsonwebtoken
 
-## -Creamos en la carpeta 'config' el archivo 'token.js', y creamos la clave maestra con la que encriptaremos la informacion
+## -Creamos en la carpeta 'config' el archivo 'token.js', y creamos las claves con las que encriptaremos la informacion
 
 module.exports = {
-    vendedor: "Aju5ne@ikTO61=eUi"
+    usuario: "Aju5ne@ikTO61=eUi",
+    vendedor: "@1234JJie56ajjuLO0==(6k&ee!!"
 }
 
 ## -Creamos en la carpeta 'config' el archivo 'accesoTokenUsuarios'
@@ -124,8 +125,35 @@ En este archivo generaremos el código necesario para crear una validación por 
 En este archivo generaremos el código necesario para crear una validación por token para los vendedores
 
 
+## -En la carpeta 'controllers', en el archivo 'UsuarioController.js' crearemos una funcionalidad llamada 'iniciarSesion'
 
-## -Añadimos en app.js el siguiente contenido
+Crearemos un inicio de sesión, que nos brindará un token distinto por cada ROL diferente que puede tener un usuario creado en nuestra base de datos
+
+Con este token podremos hacer que algunas páginas necesiten un login de vendedor para ser editadas
+
+## -En la carpeta 'routes', en el archivo 'ProductorController.js', crearemos un CRUD en el que necesitamos un token de vendedor
+
+Crearemos los endpoint, en los que necesitaremos el token de vendedor mandado por el header html 'token-acceso'
+
+## -En la carpeta 'models' creamos el archivo 'Compra.js'
+
+Aquí crearemos el modelo para los documentos de la base de datos de las compras de los usuarios
+
+## -En la carpeta 'controllers' creamos el archivo 'CompraController.js'
+
+Creamos la funcionalidad de 'crearCompra', donde ademas de añadir una compra a la base de datos añadimos +1 al campo 'vendidos' del producto que se haya vendido
+
+## -En la carpeta 'models' creamos el archivo 'Pedido.js'
+
+Aqui creamos el modelo para los pedidos, que será la compra (o el conjunto de compras) que hace un cliente para su pedido
+
+## -En la carpeta 'controllers' creamos el archivo 'PedidoController'
+
+Aqui crearemos 'crearPedido', en el que añadiendo por body un array con los ids de las compras (o una sola compra) se creará un nuevo pedido
+
+
+
+
 
 const bodyParser = require('body-parser'),
       jwt = require('jsonwebtoken'),

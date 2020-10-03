@@ -6,11 +6,16 @@ const ProductoSchema = new mongoose.Schema({
     foto: String,
     tipo: {
         type: String,
-        enum: ["funko", "videojuego", "accesorio"]
+        enum: ["funko", "periferico", "varios"],
+        default: "varios"
     },
     vendedor: String,
     precio: Number,
-    categoria: []
+    categoria: [],
+    vendidos: {
+        type: Number,
+        default: 0
+    }
 });
 
 const Producto = mongoose.model('Producto', ProductoSchema);

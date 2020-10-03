@@ -3,14 +3,13 @@ var app = express();
 const jwt = require('jsonwebtoken');
 const token = require('./token');
 
-app.set('vendedor', token.vendedor);
+app.set('usuario', token.usuario);
 
 const accesoTokenUsuarios = express.Router(); 
 
 
 accesoTokenUsuarios.use((req, res, next) => {
     const token = req.headers['token-acceso'];
-    console.log(token);
     if (token) {
       jwt.verify(token, app.get('usuario'), (err, decoded) => {      
         if (err) {
