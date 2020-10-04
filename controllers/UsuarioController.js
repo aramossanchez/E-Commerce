@@ -23,7 +23,6 @@ const UsuarioController = {
     async buscarUsuario(req,res){
         try {
             const usuario = await Usuario.findById(req.params.id);
-            usuario._id = undefined;
             usuario.dni = undefined;
             res.send (usuario);
         } catch (error) {

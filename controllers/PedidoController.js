@@ -5,6 +5,7 @@ const Usuario = require ('../models/Usuario');
 
 const CompraController = {
     async crearPedido(req,res){
+        //SI METEMOS UN ARRAY DE DATOS PARA CREAR VARIOS PEDIDOS A LA VEZ USARA EL PRIMER TRY
         try {
             //ALMACENAMOS LOS ID DE LAS COMPRAS
             const compras = req.body;
@@ -46,6 +47,7 @@ const CompraController = {
             };
         res.send(pedidosCreados);
         } catch (error) {
+            //SI METEMOS UN SOLO DOCUMENTO (SIN ARRAY) USARA EL SEGUNDO TRY
             try {
                 //ALMACENAMOS LOS ID DE LAS COMPRAS
                 const compras = req.body;

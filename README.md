@@ -1,178 +1,353 @@
-# E-Commerce
+# - GEEKSHUBS Reto Final - Backend E-Commerce
 
-Creación de un Backend para una app e-commerce, reto final en módulo Backend de GeeksHubs Academy.
+Realizamos un backend para e-commerce.
 
-# - CREACIÓN DEL ENTORNO - #
+Funcionalidad API REST con las siguiente tecnologías:
 
-Dentro de un terminal en Visual Studio Code, procederemos de la siguiente manera para preparar nuestro entorno de trabajo:
+##### -NojeJS
+##### -Express
+##### -Mongoose
+##### -Git
 
-## -Inicializamos express generator
+## -FEATURE 1: Gestión de usuario
 
-$express e-commerce --hbs
+**VALIDACIÓN POR TOKEN**
 
+Se ha creado una funcionalidad en la API en la que, tras iniciar sesión (en función de que tipo de rol tengas asignado) se te entregará un token.
 
-## -Abrimos nueva ventana en Visual Studio Code con directorio recién creado
+Será necesario incluir ese token en el header html para conseguir acceso a algunos endpoints especificados mas adelante.
 
-$code e-commerce
+En la carpeta 'config' tenemos creados varios ficheros para este fin.
 
+##### -Tenemos creado 'token.js', donde indicamos las claves con las que cifraremos los token.
 
-## -Instalamos las dependencias incluidas en el archivo 'package.json'
+##### -Creamos 'accesoTokenUsuarios.js', 'accesoTokenVendedores.js' y accesoTokenAdministradores.js', en los que incluimos el código necesario para conseguir que, en el intento de acceso de algunos endpoints, nos solicite por header html un token correcto ('token-acceso').
 
-$npm install
+**ENDPOINT DE LOGIN**
 
+##### POST -- localhost:3000/usuarios/login
 
-## -Instalamos Mongoose
+Pasamos por body DNI del usuario y contraseña (datos guardados en la base de datos), y nos devuelve mensaje indicando que todo está correcto y el token (tres tipos de token diferentes: usuario, vendedor o administrador).
 
-$npm install mongoose
+**ENDPOINT DE REGISTRO**
 
+##### POST -- localhost:3000/usuarios/registro
 
-## -Arreglamos vulnerabilidades surgidas por la instalación de las dependencias
+Pasamos por body todos los datos necesarios para la creación del usuario (ver archivo 'models->Usuario.js').
 
-$npm audit fix
+-El body será por json. Admite que en el json haya solo un objeto o un array de objetos-
 
+El campo valor del 'contraseña' se guarda en la base de datos de manera encriptada (ver archivo 'models->Usuario.js').
 
-## -Instalamos nodemon, para hacer que al guardar cambios en nuestros archivos, el servidor que tenemos levantado se reinicie de manera automática
+Devuelve los datos guardados en la base de datos tras el registro (sin mostrar el campo contraseña).
 
-$npm install nodemon
+Ejemplo de json con un usuario:
 
-# - INICIAMOS EL PROYECTO - #
-
-## -Creamos la carpeta 'config' en la raiz del proyecto, y dentro creamos el archivo 'mongoose.js'
-
-Aquí crearemos la conexión a la base de datos
-
-## -Añadimos en el archivo 'app.js' la siguiente línea (para permitir la conexión a la base de datos)
-
-require('./config/mongoose');
-
-## -Accedemos a la carpeta 'bin', y en el archivo 'www' añadimos:
-
-server.listen(port,()=>console.log("Servidor levantado en el puerto", port));
-
-# - CONFIGURAMOS CRUD - #
-
-## -Creamos la carpeta 'models' en la raiz del proyecto, y dentro creamos el archivo 'Producto.js'
-
-Aquí crearemos la validación para nuestros documentos de nuestra base de datos (los productos que venderemos en nuestra web)
-
-Nuestros productos tendrán foto. Estás fotos estarán almacenadas en '/public/images'. Para que estas fotos sean visibles vamos a añadir a 'app.js' lo siguiente:
-
-app.use(express.static(path.join(__dirname, 'public/images')));
-
-De esta manera, con un enlace tipo 'http://localhost:3000/foto.jpg' podremos acceder a las imagenes almacenadas
-
-## -Creamos la carpeta 'controllers' en la raiz del proyecto, y dentro creamos el archivo 'ProductoController.js'
-
-Aquí crearemos las funcionalidades de nuestro CRUD
-
-## -Dentro de la carpeta 'routes' creamos el archivo 'productos.js'
-
-Aquí añadiremos las diferentes rutas de nuestro CRUD
-
-## -En el archivo 'app.js' añadimos las rutas creadas en el archivo anterior
-
-var productosRouter = require('./routes/productos');
-
-----------------------------------------------------
-
-app.use('/productos', productosRouter);
-
-## - Dentro de la carpeta 'models' creamos el archivo 'Usuario.js'
-
-Aquí crearemos la validación para nuestros documentos de nuestra base de datos (los usuarios que tendrán acceso a la web)
-
-Todos los usuarios de la web tendrán una contraseña de acceso, y esa contraseña se guardará en la base de datos. Es necesario que esa contraseña se almacene cifrada.
-
-Instalamos un encriptador para poder cifrar las contraseñas:
-
-$npm i bcryptjs
-
-En 'Usuario.js' añadimos la encriptación de las contraseñas. Además, haremos que no se muestre la contraseña al hacer la búsqueda
-
-## -Creamos la carpeta 'controllers' en la raiz del proyecto, y dentro creamos el archivo 'UsuarioController.js'
-
-Aquí crearemos las funcionalidades de nuestro CRUD
-
-## -Dentro de la carpeta 'routes' creamos el archivo 'usuarios.js'
-
-Aquí añadiremos las diferentes rutas de nuestro CRUD
-
-## -En el archivo 'app.js' añadimos las rutas creadas en el archivo anterior
-
-var usuariosRouter = require('./routes/usuarios');
-
-----------------------------------------------------
-
-app.use('/usuarios', usuariosRouter);
-
-## -Para crear un método de autenticación por tokens vamos a instalar jsonwebtoken
-
-$npm install --save jsonwebtoken
-
-## -Creamos en la carpeta 'config' el archivo 'token.js', y creamos las claves con las que encriptaremos la informacion
-
-module.exports = {
-    usuario: "Aju5ne@ikTO61=eUi",
-    vendedor: "@1234JJie56ajjuLO0==(6k&ee!!"
+{
+    "nombre": "Martin",
+    "apellidos": "Ramos Amado",
+    "dni": "12345678X",
+    "direccion": "Calle Jardín 1, 9ºD, Valencia, Valencia, 46003",
+    "email": "Martin@ohyeah.com",
+    "telefono": 666778921,
+    "rol": "usuario",
+    "contraseña": "123456789"
 }
 
-## -Creamos en la carpeta 'config' el archivo 'accesoTokenUsuarios'
+Ejemplo de json con varios usuarios:
 
-En este archivo generaremos el código necesario para crear una validación por token para los usuarios
+[
+{
+    "nombre": "Armando",
+    "apellidos": "Ramos Sánchez",
+    "dni": "74125896A",
+    "direccion": "Calle Joaquin 22, 2ºC, Albacete, Albacete, 02001",
+    "email": "Armando@ohyeah.com",
+    "telefono": 654557321,
+    "rol": "administrador",
+    "contraseña": "12345678"
+},
 
-## -Creamos en la carpeta 'config' el archivo 'accesoTokenVendedores'
+{
+    "nombre": "Funko",
+    "apellidos": "SL",
+    "dni": "N12457805",
+    "direccion": "Calle Toledo 11, 8ºA, Valencia, Valencia, 46001",
+    "email": "funko@funko.com",
+    "telefono": 654778921,
+    "rol": "vendedor",
+    "contraseña": "abcdefgh"
+}
+]
 
-En este archivo generaremos el código necesario para crear una validación por token para los vendedores
+**ENDPOINT DE PERFIL (DATOS DE USUARIO)**
 
+##### GET -- localhost:3000/usuarios/buscar/:id
 
-## -En la carpeta 'controllers', en el archivo 'UsuarioController.js' crearemos una funcionalidad llamada 'iniciarSesion'
+Introducimos '_id' de usuario existente en la base de datos y nos devolverá la información almacenada sobre él en la base de datos (salvo información sensible).
 
-Crearemos un inicio de sesión, que nos brindará un token distinto por cada ROL diferente que puede tener un usuario creado en nuestra base de datos
+**ROLES ADMINISTRADOR/ USUARIO/ VENDEDOR**
 
-Con este token podremos hacer que algunas páginas necesiten un login de vendedor para ser editadas
+A la hora de crear un usuario en la base de datos, uno de los campos que tenemos definidos es 'rol'. Solo pueden existir 3 valores para este campo: usuario, vendedor o administrador. Por defecto, si no se especifica, se creará con rol 'usuario'.
 
-## -En la carpeta 'routes', en el archivo 'ProductorController.js', crearemos un CRUD en el que necesitamos un token de vendedor
+**ENDPOINTS MODIFICAR DATOS DE USUARIO**
 
-Crearemos los endpoint, en los que necesitaremos el token de vendedor mandado por el header html 'token-acceso'
+##### POST -- localhost:3000/usuarios/modificar/:id
 
-## -En la carpeta 'models' creamos el archivo 'Compra.js'
+Introducimos '_id' de usuario por url (para hacer la búsqueda del usuario que queremos modificar), y pasamos por body los cambios que queremos actualizar en la base de datos. Tras guardar los datos, se nos mostrará en pantalla todos los datos del usuario actualizados.
 
-Aquí crearemos el modelo para los documentos de la base de datos de las compras de los usuarios
+## -FEATURE 2: Gestión Product
 
-## -En la carpeta 'controllers' creamos el archivo 'CompraController.js'
+**ENDPOINTS ANAÑIR, ELIMINAR, MODIFICAR PRODUCTO (VENDEDOR)**
 
-Creamos la funcionalidad de 'crearCompra', donde ademas de añadir una compra a la base de datos añadimos +1 al campo 'vendidos' del producto que se haya vendido
+##### -AÑADIR- POST -- localhost:3000/productos/crear
 
-## -En la carpeta 'models' creamos el archivo 'Pedido.js'
+Pasamos por body todos los datos necesarios para la creación del producto (ver archivo 'models->Producto.js').
 
-Aqui creamos el modelo para los pedidos, que será la compra (o el conjunto de compras) que hace un cliente para su pedido
+-El body será por json. Admite que en el json haya solo un objeto o un array de objetos-
 
-## -En la carpeta 'controllers' creamos el archivo 'PedidoController'
+Devuelve los datos guardados en la base de datos tras el registro.
 
-Aqui crearemos 'crearPedido', en el que añadiendo por body un array con los ids de las compras (o una sola compra) se creará un nuevo pedido
+En el archivo 'routes->productos.js' se especifica que solo se pueda acceder a este endpoint añadiendo en el header html 'token-acceso' un token válido de vendedor.
 
+Ejemplo de json con un producto:
 
+{
+    "nombre": "Dragon Blanco de Ojos Azules",
+    "foto": "http://localhost:3000/dragon_blanco_ojos_azules.jpg",
+    "tipo": "funko",
+    "vendedor": "Funko SL",
+    "precio": 17.95,
+    "categoria": ["videojuego", "anime", "yugioh", "funko"]
+}
 
+Ejemplo de json con varios productos:
 
+[
+{
+    "nombre": "Edward Elric",
+    "foto": "http://localhost:3000/edward_elric.jpg",
+    "tipo": "funko",
+    "vendedor": "Funko SL",
+    "precio": 15.25,
+    "categoria": ["anime", "fullmetal alchemist", "funko"]
+},
 
-const bodyParser = require('body-parser'),
-      jwt = require('jsonwebtoken'),
-      config = require('./config/config');
+{
+    "nombre": "Flash",
+    "foto": "http://localhost:3000/flash.jpg",
+    "tipo": "funko",
+    "vendedor": "Funko SL",
+    "precio": 16.45,
+    "categoria": ["comic", "flash", "dc", "funko"]
+}
+]
 
-----------------------------------------------------
+##### -ELIMINAR- GET -- localhost:3000/productos/eliminar/:id
 
-app.set('llave', config.llave);
+Introducimos por url el '_id' del producto que queramos eliminar.
 
-----------------------------------------------------
+Nos mostrará por pantalla el producto que hemos eliminado.
 
-app.use(bodyParser.urlencoded({ extended: true}));
-app.use(bodyParser.json());
+En el archivo 'routes->productos.js' se especifica que solo se pueda acceder a este endpoint añadiendo en el header html 'token-acceso' un token válido de vendedor.
 
-----------------------------------------------------
+##### -MODIFICAR- POST -- localhost:3000/productos/modificar/:id
 
+Introducimos '_id' de producto por url (para hacer la búsqueda del producto que queremos modificar), y pasamos por body los cambios que queremos actualizar en la base de datos. Tras guardar los datos, se nos mostrará en pantalla todos los datos del producto actualizados.
 
+En el archivo 'routes->productos.js' se especifica que solo se pueda acceder a este endpoint añadiendo en el header html 'token-acceso' un token válido de vendedor.
 
+**ENDPOINTS MUESTRA ALL PRODUCTS**
 
+##### GET -- localhost:3000/productos/buscar
 
+Muestra todos los productos y todos los datos guardados sobre ellos en la base de datos.
 
+**ENDPOINTS PRODUCTOS FILTRO (MÁS VENDIDOS, PRECIO, TÍTULO...)**
 
+###### -PRECIO ASCENDENTE- GET -- localhost:3000/productos/ordenar/precio/ascendente
+
+Ordena los productos por precio, de menor a mayor.
+
+###### -PRECIO DESCENDENTE- GET -- localhost:3000/productos/ordenar/precio/descendente
+
+Ordena los productos por precio, de mayor a menor.
+
+###### -ALFABÉTICO ASCENDENTE- GET -- localhost:3000/productos/ordenar/nombre/ascendente
+
+Ordena los productos por nombre, en orden alfabético.
+
+###### -ALFABÉTICO DESCENDENTE- GET -- localhost:3000/productos/ordenar/nombre/descendente
+
+Ordena los productos por nombre, en orden alfabético inverso.
+
+###### -MENOS VENDIDOS- GET -- localhost:3000/productos/ordenar/ventas/ascendente
+
+Ordena los productos en función de las veces que han sido comprados, de menor a mayor
+
+(existe un campo en cada producto llamado 'vendidos', el cual aumenta en +1 cuando se hace una compra de ese producto)
+
+###### -MÁS VENDIDOS- GET -- localhost:3000/productos/ordenar/ventas/descendente
+
+Ordena los productos en función de las veces que han sido comprados, de mayor a menor
+
+(existe un campo en cada producto llamado 'vendidos', el cual aumenta en +1 cuando se hace una compra de ese producto)
+
+**ENDPOINTS DE PRODUCTOS POR VENDEDOR**
+
+##### GET -- localhost:3000/productos/buscar/vendedor/:vendedor
+
+Introducimos por url el valor del campo 'vendedor' que tenemos en los productos, y nos devolverá todos los productos con ese vendedor.
+
+**ENDPOINTS DE PRODUCTOS POR CATEGORÍA**
+
+##### GET -- localhost:3000/productos/buscar/categoria/:categoria
+
+Introducimos por url el valor del campo 'categoria' que tenemos en los productos, y nos devolverá todos los productos con esa categoría.
+
+## -FEATURE 3: Gestión Compras
+
+**ENDPOINT DE AÑADIR COMPRA**
+
+##### POST -- localhost:3000/compras/crear
+
+Pasamos por body 'id_producto' y 'dni_usuario' (ver archivo 'models->Compra.js'). Los campos de precio y de fecha se añaden automaticamente.
+
+-El body será por json. Admite que en el json haya solo un objeto o un array de objetos-
+
+Aumenta en +1 el campo 'vendidos' del producto que se haya incluido en la compra
+
+Devuelve los datos guardados en la base de datos tras la creación de la compra.
+
+Los datos de 'id_producto' y de 'dni_usuario' deberán de existir en la base de datos, si no dará error.
+
+Ejemplo de json con una compra:
+
+{
+    "id_producto": "5f78db9c2a55820690afbdba",
+    "dni_usuario": "45871269V"
+}
+
+Ejemplo de json con varias compras:
+
+[
+{
+    "id_producto": "5f78db9c2a55820690afbdbe",
+    "dni_usuario": "48541269V"
+},
+{
+    "id_producto": "5f78db9c2a55820690afbda9",
+    "dni_usuario": "88451269C"
+},
+{
+    "id_producto": "5f78db9c2a55820690afbdac",
+    "dni_usuario": "88451269C"
+},
+{
+    "id_producto": "5f78db9c2a55820690afbdc4",
+    "dni_usuario": "01554872Q"
+}
+]
+
+**ENDPOINT MUESTRAS TODAS LAS COMPRAS**
+
+##### GET -- localhost:3000/compras/buscar
+
+Muestra todas las compras almacenadas en la base de datos
+
+**ENDPOINT DE COMPRAS POR USUARIO (MODO FACTURA)**
+
+##### -MUESTRA LA COLECCIÓN 'COMPRAS'- GET -- localhost:3000/compras/buscar/:usuario
+
+Introducimos por url 'dni' de usuario, y mostrará cada compra hecha por ese usuario. En cada compra se mostrarán los datos tanto de producto como del cliente, además de los propios de la compra.
+
+##### -MUESTRA LA COLECCIÓN 'PEDIDOS'- GET -- localhost:3000/pedidos/buscar/:usuario
+
+--------------------------PARÉNTIS---------------------------
+
+Para tener otra manera de consultar las compras de los clientes mas organizada, decidí crear la colección 'pedidos', con su propio endpoint.
+
+La colección 'pedidos' recoge la compra o compras que ha hecho un usuario PARA MOSTRAR EL PEDIDO COMPLETO. Por ejemplo: en nuestro e-commerce, un usuario hace una compra de 'Monitor Asus 24 pulgadas' y hace otra compra de 'Pendrive Kingston 32GB'. Esas 2 compras las hace en la misma visita a la página, las pagará a la vez y se le enviarán a la vez a la misma dirección, por lo tanto se creará un pedido para esas 2 compras, información que se almacenará en la colección 'pedidos'.
+
+--ENDPOINT DE CREACIÓN DE PEDIDO--
+
+-POST -- localhost:3000/pedidos/crear
+
+Pasamos por body todos los datos necesarios para la creación del pedido, que es unicamente un array con los "id_compra" que queramos añadir a un mismo pedido. El resto de campos del documento se creará de manera automática (ver archivo 'models->Pedido.js').
+
+-El body será por json. Admite que en el json haya un solo array de objetos o un array de arrays de objetos-
+
+Devuelve los datos guardados en la base de datos tras guardar los datos de los pedidos.
+
+Los datos de 'id_compra' deberán de existir en la base de datos, si no dará error.
+
+Ejemplo de json con un pedido:
+
+[
+    {
+        "id_compra": "5f78dd42da37d5401417e2eb"
+    },
+    {
+        "id_compra": "5f78dd42da37d5401417e2ec"
+    },
+    {
+        "id_compra": "5f78dd42da37d5401417e2ed"
+    }
+]
+
+Ejemplo de json con varios pedidos:
+
+[
+[
+    {
+        "id_compra": "5f78dd42da37d5401417e2eb"
+    },
+    {
+        "id_compra": "5f78dd42da37d5401417e2ec"
+    },
+    {
+        "id_compra": "5f78dd42da37d5401417e2ed"
+    }
+],
+[
+    {
+        "id_compra": "5f78dd43da37d5401417e2ee"
+    }
+],
+[
+    {
+        "id_compra": "5f78dd43da37d5401417e2ef"
+    },
+    {
+        "id_compra": "5f78dd43da37d5401417e2f0"
+    },
+    {
+        "id_compra": "5f78dd43da37d5401417e2f1"
+    },
+    {
+        "id_compra": "5f78dd43da37d5401417e2f2"
+    }
+]
+]
+
+--------------------------PARÉNTIS---------------------------
+
+Introducimos por url 'dni' de usuario, y mostrará cada pedido hecho por ese usuario. Se mostrarán todos los datos de pedido almacenado en la base de datos.
+
+**ENDPOINT MODIFICACIÓN DATOS FACTURA**
+
+##### POST -- localhost:3000/pedidos/modificar/:pedido
+
+Introducimos por url '_id' del pedido, y pasamos por body los datos que queramos modificar.
+
+Nos mostrará el pedido ya modificado.
+
+En el archivo 'routes->productos.js' se especifica que solo se pueda acceder a este endpoint añadiendo en el header html 'token-acceso' un token válido de vendedor.
+
+## OBSERVACIONES FINALES
+
+Indicar, para finalizar, mi agrado con la realización de este proyecto final, en el que nos encargamos de crear desde cero una API REST para un e-commerce. Era una tarea que, al principio, me parecia imposible de realizar pero que gracias a los conocimientos adquiridos durante la formación y a la investigación por mi cuenta he conseguido sacar adelante con el resultado aquí expuesto.
+
+Sin más, quedo abierto a cualquier corrección, mejora o sugerencia.
+
+¡Muchas gracias!

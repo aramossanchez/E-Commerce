@@ -57,9 +57,7 @@ const CompraController = {
             var datosFactura=[];
             for(i in compras){
                 var producto = await Producto.find({_id:compras[i].id_producto});
-                console.log(producto);
                 var usuario = await Usuario.find({dni:compras[i].dni_usuario});
-                console.log(usuario);
                 datosFactura.push(compras[i]._id);
                 datosFactura.push(compras[i].precio);
                 datosFactura.push(usuario);
