@@ -98,7 +98,7 @@ Introducimos '_id' de usuario por url (para hacer la búsqueda del usuario que q
 
 ## -FEATURE 2: Gestión Product
 
-**ENDPOINTS ANAÑIR, ELIMINAR, MODIFICAR PRODUCTO (VENDEDOR)**
+**ENDPOINTS AÑADIR, ELIMINAR, MODIFICAR PRODUCTO (VENDEDOR)**
 
 ##### -AÑADIR- POST -- localhost:3000/productos/crear
 
